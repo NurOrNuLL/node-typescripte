@@ -1,22 +1,25 @@
-import express from "express";
-import { router } from "./routes/loginRoutes";
-import bodyParser from "body-parser";
-import cookieSession from "cookie-session";
+import bodyParser from 'body-parser';
+import cookieSession from 'cookie-session';
+import express from 'express';
 
-class Server {
-	private readonly app: express.Express = express();
+import { AppRouter } from './AppRouter';
+import './controllers/HomeController';
+import './controllers/LoginController';
 
-	constructor() {
-		this.app.use(bodyParser.urlencoded({ extended: true }));
-		this.app.use(cookieSession({ keys: ['user'] }));
-		this.app.use(router);
-	}
+export class Server {
+  private readonly app: express.Express = express();
 
-	start(): void {
-		this.app.listen(3000, () => {
-			console.log("Started on port 3000");
-		});
-	}
+  constructor() {
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+    this.app.use(cookieSession({ keys: ['user'] }));
+    this.app.use(AppRouter.getInstance());
+  }
+
+  start(): void {
+    this.app.listen(3000, () => {
+      console.log('Started on port 3000');
+    });
+  }
 }
 
 const server = new Server();
